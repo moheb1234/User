@@ -1,11 +1,9 @@
 package com.example.user;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "my_user" , schema = "user_schema")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
