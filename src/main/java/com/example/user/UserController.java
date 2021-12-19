@@ -1,10 +1,6 @@
 package com.example.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +21,15 @@ public class UserController {
     User save(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String email) {
         User user = new User(firstname, lastname, email);
         return repository.save(user);
+    }
+
+    @GetMapping("/load/{firstname}")
+    public User user(@PathVariable String firstname) {
+        return repository.user(firstname);
+    }
+
+    @GetMapping("/like/{pattern}")
+    public List<User> userLike(@PathVariable String pattern) {
+        return repository.all(pattern);
     }
 }
