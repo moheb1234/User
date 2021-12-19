@@ -10,8 +10,11 @@ import java.util.List;
 
 @RestController
 public class UserController {
-    @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
+
+    public UserController(UserRepository repository) {
+        this.repository = repository;
+    }
 
     @GetMapping("/load")
     public List<User> users() {
