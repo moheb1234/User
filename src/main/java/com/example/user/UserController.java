@@ -40,4 +40,9 @@ public class UserController {
     User findByEmail(@PathVariable String email){
         return repository.findByEmail(email);
     }
+
+    @DeleteMapping("/delete/{id}")
+    void deleteUser(@PathVariable int id){
+        repository.deleteById(id);
+    }
 }
