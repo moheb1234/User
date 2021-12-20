@@ -3,6 +3,7 @@ package com.example.user;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -23,13 +24,20 @@ public class UserController {
         return repository.save(user);
     }
 
-    @GetMapping("/load/{firstname}")
-    public User user(@PathVariable String firstname) {
-        return repository.user(firstname);
+    @GetMapping("/load/byId/{id}")
+    Optional<User> getOneUser(@PathVariable int id) {
+        return repository.findById(id);
     }
 
-    @GetMapping("/like/{pattern}")
-    public List<User> userLike(@PathVariable String pattern) {
-        return repository.all(pattern);
+    @PutMapping("/save/{id}")
+    void updateUSer(@PathVariable int id, @RequestBody User newUser) {
+        if (repository.findByEmail(newUser.getEmail())==null){
+        repository.updateUser(newUser.getFirstname(), newUser.getLastname(), newUser.getEmail(), id);
+        }
+    }
+
+    @GetMapping("/load/byEmail/{email}")
+    User findByEmail(@PathVariable String email){
+        return repository.findByEmail(email);
     }
 }

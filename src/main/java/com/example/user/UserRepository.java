@@ -2,17 +2,18 @@ package com.example.user;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public interface UserRepository extends JpaRepository<User, Integer> {
+    @Modifying
+    @Transactional
+    @Query(value = "update User u set u.firstname = :firstname , u.lastname = :lastname , u.email = :email where u.id = :id ")
+    void updateUser(String firstname, String lastname, String email, int id);
 
-    @Query(value = "select u from User u where u.firstname  = ?1")
-      User user(String firstname);
+    User findByEmail(String email);
 
-    @Query(value = "select u from User u where u.firstname like %?1%")
-    List<User> all(String pattern);
 }
