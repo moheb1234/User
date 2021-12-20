@@ -31,18 +31,18 @@ public class UserController {
 
     @PutMapping("/save/{id}")
     void updateUSer(@PathVariable int id, @RequestBody User newUser) {
-        if (repository.findByEmail(newUser.getEmail())==null){
-        repository.updateUser(newUser.getFirstname(), newUser.getLastname(), newUser.getEmail(), id);
+        if (repository.findByEmail(newUser.getEmail()) == null) {
+            repository.updateUser(newUser.getFirstname(), newUser.getLastname(), newUser.getEmail(), id);
         }
     }
 
     @GetMapping("/load/byEmail/{email}")
-    User findByEmail(@PathVariable String email){
+    User findByEmail(@PathVariable String email) {
         return repository.findByEmail(email);
     }
 
     @DeleteMapping("/delete/{id}")
-    void deleteUser(@PathVariable int id){
+    void deleteUser(@PathVariable int id) {
         repository.deleteById(id);
     }
 }
