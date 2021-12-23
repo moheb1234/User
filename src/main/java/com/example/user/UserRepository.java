@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Transactional
     @Query(value = "update User u set u.firstname = :firstname , u.lastname = :lastname , u.email = :email where u.id = :id ")
-    void updateUser(String firstname, String lastname, String email, int id);
+    int updateUser(String firstname, String lastname, String email, int id);
 
     User findByEmail(String email);
 

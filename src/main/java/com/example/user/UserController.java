@@ -29,11 +29,9 @@ public class UserController {
         return repository.findById(id);
     }
 
-    @PutMapping("/save/{id}")
-    void updateUSer(@PathVariable int id, @RequestBody User newUser) {
-        if (repository.findByEmail(newUser.getEmail()) == null) {
-            repository.updateUser(newUser.getFirstname(), newUser.getLastname(), newUser.getEmail(), id);
-        }
+    @PutMapping("/update/{id}")
+    int updateUSer(@PathVariable int id, @RequestBody User newUser) {
+        return repository.updateUser(newUser.getFirstname(), newUser.getLastname(), newUser.getEmail(), id);
     }
 
     @GetMapping("/load/byEmail/{email}")

@@ -1,9 +1,11 @@
 package com.example.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "my_user" , schema = "user_schema")
+@Table(name = "my_user", schema = "user_schema")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,6 +19,15 @@ public class User {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+    }
+
+    @JsonIgnore
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstname() {
