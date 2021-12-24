@@ -69,7 +69,7 @@ class UserControllerTest {
         User newUser = new User("2", "2", "@10");
         when(repository.updateUser(newUser.getFirstname(),newUser.getFirstname(),newUser.getEmail(),0))
                 .thenReturn(1);
-        String json = JsonTools.toJson(newUser);
+        String json = toJson(newUser);
         assert json != null;
         mockMvc.perform(put("/update/0").content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
