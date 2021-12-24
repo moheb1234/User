@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.user.JsonTools.toJson;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -62,21 +64,20 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.lastname", is(user.getLastname())))
                 .andExpect(jsonPath("$.firstname", is(user.getFirstname())));
     }
-
-//    @Test
-//    void updateUSer() throws Exception {
-//        User newUser = new User("2", "2", "@10");
-//        when(repository.updateUser(newUser.getFirstname(),newUser.getFirstname(),newUser.getEmail(),0))
-//                .thenReturn(1);
-//        String json = JsonTools.toJson(newUser);
-//        assert json != null;
-//        mockMvc.perform(put("/update/0").content(json))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    void updateUSer() throws Exception {
+        User newUser = new User("2", "2", "@10");
+        when(repository.updateUser(newUser.getFirstname(),newUser.getFirstname(),newUser.getEmail(),0))
+                .thenReturn(1);
+        String json = JsonTools.toJson(newUser);
+        assert json != null;
+        mockMvc.perform(put("/update/0").content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
     @Test
     void findByEmail() throws Exception {
-        User user = new User("1","2","@3");
+        User user = new User("1", "2", "@3");
         when(repository.findByEmail(user.getEmail())).thenReturn(user);
         mockMvc.perform(get("/load/byEmail/@3"))
                 .andExpect(status().isOk())
@@ -88,5 +89,16 @@ class UserControllerTest {
     @Test
     void deleteUser() throws Exception {
         mockMvc.perform(delete("/delete/1")).andExpect(status().isOk());
+    }
+
+
+    @Test
+    void saveV2() throws Exception {
+        User user = new User("1,", "2", "@3");
+        String json = toJson(user);
+        when(repository.save(user)).thenReturn(user);
+        assert json != null;
+        mockMvc.perform(post("/saveV2")
+                .content(json).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }

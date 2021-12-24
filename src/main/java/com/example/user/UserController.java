@@ -43,4 +43,9 @@ public class UserController {
     void deleteUser(@PathVariable int id) {
         repository.deleteById(id);
     }
+
+    @PostMapping("/saveV2")
+    User saveV2(@RequestBody User user) {
+        return repository.save(user);
+    }
 }
