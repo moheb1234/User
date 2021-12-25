@@ -1,12 +1,13 @@
 package com.example.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
 @RestController
 public class UserController {
+
     private final UserRepository repository;
 
     public UserController(UserRepository repository) {
@@ -25,13 +26,14 @@ public class UserController {
     }
 
     @GetMapping("/load/byId/{id}")
-    Optional<User> getOneUser(@PathVariable int id) {
+    Optional<User> getOneUser(@PathVariable String id) {
         return repository.findById(id);
     }
 
     @PutMapping("/update/{id}")
-    int updateUSer(@PathVariable int id, @RequestBody User newUser) {
-        return repository.updateUser(newUser.getFirstname(), newUser.getLastname(), newUser.getEmail(), id);
+    User updateUSer(@PathVariable String id, @RequestBody User newUser) {
+        newUser.setId(id);
+        return repository.save(newUser);
     }
 
     @GetMapping("/load/byEmail/{email}")
@@ -40,7 +42,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    void deleteUser(@PathVariable int id) {
+    void deleteUser(@PathVariable String id) {
         repository.deleteById(id);
     }
 
