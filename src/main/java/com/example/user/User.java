@@ -1,17 +1,14 @@
 package com.example.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import javax.persistence.*;
 
-@Document(collection = "user")
+@Document(collection = "my_user")
 public class User {
-   @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+    @MongoId
     private String id;
     private String firstname, lastname, email;
 
@@ -37,20 +34,20 @@ public class User {
         return firstname;
     }
 
-    public String getLastname() {
-        return lastname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
 
+    public String getLastname() {
+        return lastname;
+    }
+
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
@@ -67,9 +64,9 @@ public class User {
                 '}';
     }
 
-    public void update(User user){
-        firstname = user.firstname;
-        lastname = user.lastname;
-        email = user.firstname;
+    public void update(@NotNull User updatedUser) {
+        firstname = updatedUser.firstname;
+        lastname = updatedUser.lastname;
+        email = updatedUser.firstname;
     }
 }

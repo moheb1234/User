@@ -1,12 +1,11 @@
 package com.example.user;
 
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.stereotype.Service;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends MongoRepository<User, String> {
 
     User findByEmail(String email);
+
 }

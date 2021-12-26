@@ -1,10 +1,10 @@
 package com.example.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 @RestController
 public class UserController {
 
@@ -31,9 +31,14 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    User updateUSer(@PathVariable String id, @RequestBody User newUser) {
-        newUser.setId(id);
-        return repository.save(newUser);
+    User updateUSer(@PathVariable String id, @RequestBody User newUser) throws Exception {
+        Optional<User> user = repository.findById(id);
+        if (user.isEmpty()) {
+            throw new Exception("user not found");
+        } else {
+            user.get().update(newUser);
+            return repository.save(user.get());
+        }
     }
 
     @GetMapping("/load/byEmail/{email}")
