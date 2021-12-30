@@ -1,9 +1,10 @@
-package com.example.user;
+package com.example.user.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import java.util.Objects;
 
 
 @Document(collection = "my_user")
@@ -20,7 +21,6 @@ public class User {
         this.lastname = lastname;
         this.email = email;
     }
-
     @JsonIgnore
     public String getId() {
         return id;
@@ -57,16 +57,28 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
 
-    public void update(@NotNull User updatedUser) {
-        firstname = updatedUser.firstname;
-        lastname = updatedUser.lastname;
-        email = updatedUser.firstname;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return firstname.equals(user.firstname) && lastname.equals(user.lastname) && email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstname, lastname, email);
+    }
+
+    public void setAll(String firstname, String lastname, String email) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
     }
 }
