@@ -17,12 +17,12 @@ public class UserController {
         this.model = model;
     }
 
-    @GetMapping("/load")
+    @GetMapping("/users")
     public List<User> users() {
         return model.findAll();
     }
 
-    @PostMapping("/save")
+    @PostMapping("/users")
     User save(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String email) {
         try {
             return model.save(firstname, lastname, email);
@@ -32,7 +32,7 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/load/byId/{id}")
+    @GetMapping("/users/{id}")
     User getOneUser(@PathVariable("id") String id) {
         try {
             return model.findById(id);
@@ -42,7 +42,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/users/{id}")
     User updateUSer(@PathVariable String id, @RequestBody User newUser) {
         try {
             return model.update(id,newUser);
@@ -52,7 +52,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/load/byEmail/{email}")
+    @GetMapping("/users/find-by-email/{email}")
     User findByEmail(@PathVariable String email) {
         try {
             return model.findByEmail(email);
