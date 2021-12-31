@@ -1,8 +1,8 @@
 package com.example.user.model;
 
 import com.example.user.entities.User;
+import com.example.user.exception.DuplicateValueException;
 import com.example.user.exception.EmailException;
-import com.example.user.exception.EmailIsExistsException;
 import com.example.user.exception.UserNotFoundException;
 import com.example.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -25,39 +25,41 @@ public class UserModel {
         return repository.findAll();
     }
 
-    public User save(String firstname, String lastname, String email) throws EmailException, EmailIsExistsException {
+    public User save(int id, String firstname, String lastname, String email) throws EmailException, DuplicateValueException {
+        if (repository.findById(id).isPresent())
+            throw new DuplicateValueException(id);
         if (!emailIsValid(email))
-            throw new EmailException("email is not valid");
+            throw new EmailException(email);
         if (repository.findByEmail(email) != null)
-            throw new EmailIsExistsException("email is already exist");
-        return repository.save(new User(firstname, lastname, email));
+            throw new DuplicateValueException(email);
+        return repository.save(new User(id, firstname, lastname, email));
     }
 
-    public User findById(String id) throws UserNotFoundException {
+    public User findById(int id) throws UserNotFoundException {
         Optional<User> user = repository.findById(id);
         if (user.isEmpty())
-            throw new UserNotFoundException("user not exists");
+            throw new UserNotFoundException(id);
         return user.get();
     }
 
-    public User update(String id, User newUser) throws UserNotFoundException, EmailException, EmailIsExistsException {
+    public User update(int id, User newUser) throws UserNotFoundException, EmailException, DuplicateValueException {
         User user = findById(id);
         user.setAll(newUser.getFirstname(), newUser.getLastname(), newUser.getEmail());
         if (!emailIsValid(newUser.getEmail()))
-            throw new EmailException("email is not valid");
+            throw new EmailException(newUser.getEmail());
         if (findByEmail(newUser.getEmail()) == null || newUser.getEmail().equals(user.getEmail()))
             return repository.save(user);
-        throw new EmailIsExistsException("new email is already exist");
+        throw new DuplicateValueException(newUser.getEmail());
     }
 
     public User findByEmail(String email) throws UserNotFoundException {
         User user = repository.findByEmail(email);
         if (user == null)
-            throw new UserNotFoundException("user not exist");
+            throw new UserNotFoundException(email);
         return user;
     }
 
-    public int delete(String id) throws UserNotFoundException {
+    public int delete(int id) throws UserNotFoundException {
         if (findById(id) != null) {
             repository.deleteById(id);
             return 1;

@@ -1,32 +1,33 @@
 package com.example.user.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
-
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 
-@Document(collection = "my_user")
+@Entity
+@Table(name = "my_user", schema = "user_schema")
 public class User {
-    @MongoId
-    private String id;
+    @Id
+    private int id;
     private String firstname, lastname, email;
 
     public User() {
     }
 
-    public User(String firstname, String lastname, String email) {
+    public User(int id, String firstname, String lastname, String email) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
     }
-    @JsonIgnore
-    public String getId() {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -56,11 +57,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return "User{" + "id='" + id + '\'' + ", firstname='" + firstname + '\'' + ", lastname='"
+                + lastname + '\'' + ", email='" + email + '\'' + '}';
     }
 
     @Override
@@ -68,7 +66,7 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return firstname.equals(user.firstname) && lastname.equals(user.lastname) && email.equals(user.email);
+        return id == user.id && firstname.equals(user.firstname) && lastname.equals(user.lastname) && email.equals(user.email);
     }
 
     @Override

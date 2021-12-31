@@ -4,8 +4,8 @@ import java.util.regex.Pattern;
 
 public class EmailException extends Exception {
 
-    public EmailException(String message) {
-        super(message);
+    public EmailException(String email) {
+        super("email :"+email+" is not valid");
     }
 
     public static boolean emailIsValid(String email){

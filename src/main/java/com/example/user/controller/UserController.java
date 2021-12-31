@@ -2,7 +2,7 @@ package com.example.user.controller;
 
 import com.example.user.entities.User;
 import com.example.user.exception.EmailException;
-import com.example.user.exception.EmailIsExistsException;
+import com.example.user.exception.DuplicateValueException;
 import com.example.user.exception.UserNotFoundException;
 import com.example.user.model.UserModel;
 import org.springframework.web.bind.annotation.*;
@@ -23,17 +23,17 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    User save(@RequestParam String firstname, @RequestParam String lastname, @RequestParam String email) {
+    User save(@RequestParam int id,@RequestParam String firstname, @RequestParam String lastname, @RequestParam String email) {
         try {
-            return model.save(firstname, lastname, email);
-        } catch (EmailException | EmailIsExistsException e) {
+            return model.save(id, firstname, lastname, email);
+        } catch (EmailException | DuplicateValueException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     @GetMapping("/users/{id}")
-    User getOneUser(@PathVariable("id") String id) {
+    User getOneUser(@PathVariable() int id) {
         try {
             return model.findById(id);
         } catch (UserNotFoundException e) {
@@ -43,10 +43,10 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    User updateUSer(@PathVariable String id, @RequestBody User newUser) {
+    User updateUSer(@PathVariable int id, @RequestBody User newUser) {
         try {
             return model.update(id,newUser);
-        } catch (UserNotFoundException | EmailException | EmailIsExistsException e) {
+        } catch (UserNotFoundException | EmailException | DuplicateValueException e) {
             e.printStackTrace();
             return null;
         }
@@ -62,8 +62,8 @@ public class UserController {
         return null;
     }
 
-    @DeleteMapping("/delete/{id}")
-    int deleteUser(@PathVariable String id) {
+    @DeleteMapping("/users/{id}")
+    int deleteUser(@PathVariable int id) {
         try {
             return model.delete(id);
         } catch (Exception e) {
