@@ -1,8 +1,8 @@
 package com.example.user.controller;
 
 import com.example.user.entities.User;
-import com.example.user.exception.EmailException;
 import com.example.user.exception.DuplicateValueException;
+import com.example.user.exception.EmailException;
 import com.example.user.exception.UserNotFoundException;
 import com.example.user.model.UserModel;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    User save(@RequestParam int id,@RequestParam String firstname, @RequestParam String lastname, @RequestParam String email) {
+    User save(@RequestParam int id, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String email) {
         try {
             return model.save(id, firstname, lastname, email);
         } catch (EmailException | DuplicateValueException e) {
@@ -45,7 +45,7 @@ public class UserController {
     @PutMapping("/users/{id}")
     User updateUSer(@PathVariable int id, @RequestBody User newUser) {
         try {
-            return model.update(id,newUser);
+            return model.update(id, newUser);
         } catch (UserNotFoundException | EmailException | DuplicateValueException e) {
             e.printStackTrace();
             return null;
