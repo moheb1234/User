@@ -44,12 +44,15 @@ public class UserModel {
 
     public User update(int id, User newUser) throws UserNotFoundException, EmailException, DuplicateValueException {
         User user = findById(id);
-        user.setAll(newUser.getFirstname(), newUser.getLastname(), newUser.getEmail());
+        if (repository.findById(newUser.getId()).isPresent())
+            throw new DuplicateValueException(newUser.getId());
         if (!emailIsValid(newUser.getEmail()))
             throw new EmailException(newUser.getEmail());
-        if (findByEmail(newUser.getEmail()) == null || newUser.getEmail().equals(user.getEmail()))
-            return repository.save(user);
-        throw new DuplicateValueException(newUser.getEmail());
+        if (repository.findByEmail(newUser.getEmail()) != null && !newUser.getEmail().equals(user.getEmail())) {
+            throw new DuplicateValueException(newUser.getEmail());
+        }
+        delete(id);
+        return repository.save(newUser);
     }
 
     public User findByEmail(String email) throws UserNotFoundException {
@@ -60,10 +63,10 @@ public class UserModel {
     }
 
     public int delete(int id) throws UserNotFoundException {
-        if (findById(id) != null) {
+        if (repository.findById(id).isPresent()) {
             repository.deleteById(id);
             return 1;
         }
-        return 0;
+        throw new UserNotFoundException(id);
     }
 }

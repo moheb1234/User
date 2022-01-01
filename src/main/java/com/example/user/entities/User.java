@@ -23,6 +23,13 @@ public class User {
         this.email = email;
     }
 
+    public User(User other) {
+        this.id = other.id;
+        this.firstname = other.firstname;
+        this.lastname = other.lastname;
+        this.email = other.email;
+    }
+
     public int getId() {
         return id;
     }
@@ -74,9 +81,4 @@ public class User {
         return Objects.hash(firstname, lastname, email);
     }
 
-    public void setAll(String firstname, String lastname, String email) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-    }
 }
