@@ -2,8 +2,8 @@ package com.example.user.Test;
 
 
 import com.example.user.controller.UserController;
-import com.example.user.entities.User;
-import com.example.user.model.UserModel;
+import com.example.user.model.User;
+import com.example.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,7 +28,7 @@ class UserControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    UserModel model;
+    UserService model;
 
     @Test
     void save() throws Exception {

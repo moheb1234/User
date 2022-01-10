@@ -1,4 +1,4 @@
-package com.example.user.entities;
+package com.example.user.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,7 +7,7 @@ import java.util.Objects;
 
 
 @Entity
-@Table(name = "my_user", schema = "user_schema")
+@Table(name = "users", schema = "user_schema")
 public class User {
     @Id
     private int id;

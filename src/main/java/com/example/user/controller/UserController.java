@@ -1,71 +1,71 @@
 package com.example.user.controller;
 
-import com.example.user.entities.User;
+import com.example.user.model.User;
 import com.example.user.exception.DuplicateValueException;
 import com.example.user.exception.EmailException;
 import com.example.user.exception.UserNotFoundException;
-import com.example.user.model.UserModel;
+import com.example.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import static com.example.user.http_request_resource.UserUri.*;
 
 @RestController
 public class UserController {
-    private final UserModel model;
+    private final UserService service;
 
-    public UserController(UserModel model) {
-        this.model = model;
+    public UserController(UserService model) {
+        this.service = model;
     }
 
-    @GetMapping("/users")
+    @GetMapping(find_all_user)
     public List<User> users() {
-        return model.findAll();
+        return service.findAll();
     }
 
-    @PostMapping("/users")
+    @PostMapping(create_user)
     User save(@RequestParam int id, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String email) {
         try {
-            return model.save(id, firstname, lastname, email);
+            return service.save(id, firstname, lastname, email);
         } catch (EmailException | DuplicateValueException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping(find_user_by_id)
     User getOneUser(@PathVariable() int id) {
         try {
-            return model.findById(id);
+            return service.findById(id);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping(update_user)
     User updateUSer(@PathVariable int id, @RequestBody User newUser) {
         try {
-            return model.update(id, newUser);
+            return service.update(id, newUser);
         } catch (UserNotFoundException | EmailException | DuplicateValueException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    @GetMapping("/users/find-by-email/{email}")
+    @GetMapping(find_user_by_email)
     User findByEmail(@PathVariable String email) {
         try {
-            return model.findByEmail(email);
+            return service.findByEmail(email);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping(delete_user)
     int deleteUser(@PathVariable int id) {
         try {
-            return model.delete(id);
+            return service.delete(id);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;

@@ -8,9 +8,10 @@
         <version>2.6.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>User</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <groupId>com.baeldung</groupId>
+    <artifactId>SpringBootExecutableJar</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>User</name>
     <description>User</description>
     <properties>

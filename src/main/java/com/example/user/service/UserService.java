@@ -1,6 +1,6 @@
-package com.example.user.model;
+package com.example.user.service;
 
-import com.example.user.entities.User;
+import com.example.user.model.User;
 import com.example.user.exception.DuplicateValueException;
 import com.example.user.exception.EmailException;
 import com.example.user.exception.UserNotFoundException;
@@ -13,11 +13,11 @@ import java.util.Optional;
 import static com.example.user.exception.EmailException.emailIsValid;
 
 @Service
-public class UserModel {
+public class UserService {
 
     UserRepository repository;
 
-    public UserModel(UserRepository repository) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
     }
 
