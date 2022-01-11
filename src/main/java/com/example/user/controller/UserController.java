@@ -1,12 +1,14 @@
 package com.example.user.controller;
 
-import com.example.user.model.User;
 import com.example.user.exception.DuplicateValueException;
 import com.example.user.exception.EmailException;
 import com.example.user.exception.UserNotFoundException;
+import com.example.user.model.User;
 import com.example.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 import static com.example.user.http_request_resource.UserUri.*;
 
 @RestController
