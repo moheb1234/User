@@ -1,72 +1,67 @@
 package com.example.user.service;
 
-import com.example.user.model.User;
+import com.example.user.dao.UserDao;
 import com.example.user.exception.DuplicateValueException;
 import com.example.user.exception.EmailException;
 import com.example.user.exception.UserNotFoundException;
-import com.example.user.repository.UserRepository;
+import com.example.user.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.example.user.exception.EmailException.emailIsValid;
 
 @Service
 public class UserService {
 
-    UserRepository repository;
+    private final UserDao userDao;
 
-    public UserService(UserRepository repository) {
-        this.repository = repository;
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     public List<User> findAll() {
-        return repository.findAll();
+        return userDao.findAll();
     }
 
     public User save(int id, String firstname, String lastname, String email) throws EmailException, DuplicateValueException {
-        if (repository.findById(id).isPresent())
+        if (userDao.findById(id) != null) {
             throw new DuplicateValueException(id);
-        if (!emailIsValid(email))
+        }
+        if (!emailIsValid(email)) {
             throw new EmailException(email);
-        if (repository.findByEmail(email) != null)
+        }
+        if (userDao.findByEmail(email) != null) {
             throw new DuplicateValueException(email);
-        return repository.save(new User(id, firstname, lastname, email));
+        }
+        return userDao.save(new User(id, firstname, lastname, email));
     }
 
     public User findById(int id) throws UserNotFoundException {
-        Optional<User> user = repository.findById(id);
-        if (user.isEmpty())
+        User user = userDao.findById(id);
+        if (user == null) {
             throw new UserNotFoundException(id);
-        return user.get();
+        }
+        return user;
     }
 
-    public User update(int id, User newUser) throws UserNotFoundException, EmailException, DuplicateValueException {
-        User user = findById(id);
-        if (repository.findById(newUser.getId()).isPresent())
-            throw new DuplicateValueException(newUser.getId());
-        if (!emailIsValid(newUser.getEmail()))
-            throw new EmailException(newUser.getEmail());
-        if (repository.findByEmail(newUser.getEmail()) != null && !newUser.getEmail().equals(user.getEmail())) {
-            throw new DuplicateValueException(newUser.getEmail());
-        }
-        delete(id);
-        return repository.save(newUser);
+    public void update(int id, User newUser)  {
+         userDao.update(id, newUser);
     }
 
     public User findByEmail(String email) throws UserNotFoundException {
-        User user = repository.findByEmail(email);
-        if (user == null)
+        User user = userDao.findByEmail(email);
+        if (user == null) {
             throw new UserNotFoundException(email);
+        }
         return user;
     }
 
     public int delete(int id) throws UserNotFoundException {
-        if (repository.findById(id).isPresent()) {
-            repository.deleteById(id);
-            return 1;
+        int result = userDao.delete(id);
+        if (result == 0) {
+            throw new UserNotFoundException(id);
         }
-        throw new UserNotFoundException(id);
+        return result;
     }
 }

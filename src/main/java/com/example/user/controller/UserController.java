@@ -5,6 +5,8 @@ import com.example.user.exception.EmailException;
 import com.example.user.exception.UserNotFoundException;
 import com.example.user.model.User;
 import com.example.user.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,62 +17,39 @@ import static com.example.user.http_request_resource.UserUri.*;
 public class UserController {
     private final UserService service;
 
-    public UserController(UserService model) {
-        this.service = model;
+    public UserController(UserService service) {
+        this.service = service;
     }
 
     @GetMapping(find_all_user)
-    public List<User> users() {
-        return service.findAll();
+    public ResponseEntity<List<User>> users() {
+        return new ResponseEntity<>(service.findAll(),HttpStatus.OK);
     }
 
     @PostMapping(create_user)
-    User save(@RequestParam int id, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String email) {
-        try {
-            return service.save(id, firstname, lastname, email);
-        } catch (EmailException | DuplicateValueException e) {
-            e.printStackTrace();
-        }
-        return null;
+    ResponseEntity<User> save(@RequestParam int id, @RequestParam String firstname, @RequestParam String lastname, @RequestParam String email)
+            throws DuplicateValueException, EmailException {
+        return new ResponseEntity<>(service.save(id,firstname,lastname,email),HttpStatus.CREATED);
     }
 
     @GetMapping(find_user_by_id)
-    User getOneUser(@PathVariable() int id) {
-        try {
-            return service.findById(id);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+    ResponseEntity<User> getOneUser(@PathVariable() int id) throws UserNotFoundException {
+        return new ResponseEntity<>(service.findById(id), HttpStatus.ACCEPTED);
     }
 
     @PutMapping(update_user)
-    User updateUSer(@PathVariable int id, @RequestBody User newUser) {
-        try {
-            return service.update(id, newUser);
-        } catch (UserNotFoundException | EmailException | DuplicateValueException e) {
-            e.printStackTrace();
-            return null;
-        }
+    ResponseEntity<User> updateUSer(@PathVariable int id, @RequestBody User newUser) {
+        service.update(id,newUser);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(find_user_by_email)
-    User findByEmail(@PathVariable String email) {
-        try {
-            return service.findByEmail(email);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    ResponseEntity<User> findByEmail(@PathVariable String email) throws UserNotFoundException {
+        return new ResponseEntity<>(service.findByEmail(email),HttpStatus.OK);
     }
 
     @DeleteMapping(delete_user)
-    int deleteUser(@PathVariable int id) {
-        try {
-            return service.delete(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
+    ResponseEntity<Integer> deleteUser(@PathVariable int id) throws UserNotFoundException {
+        return new ResponseEntity<>(service.delete(id),HttpStatus.OK);
     }
 }
