@@ -3,6 +3,7 @@ package com.example.user.service;
 import com.example.user.dao.UserDao;
 import com.example.user.exception.DuplicateValueException;
 import com.example.user.exception.EmailException;
+import com.example.user.exception.InputException;
 import com.example.user.exception.UserNotFoundException;
 import com.example.user.model.User;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,11 @@ public class UserService {
         return userDao.findAll();
     }
 
-    public User save(int id, String firstname, String lastname, String email) throws EmailException, DuplicateValueException {
+    public User save(int id, String firstname, String lastname, String email)
+            throws EmailException, DuplicateValueException, InputException {
+        if (firstname.isEmpty() || lastname.isEmpty()) {
+            throw new InputException();
+        }
         if (userDao.findById(id) != null) {
             throw new DuplicateValueException(id);
         }
@@ -45,8 +50,9 @@ public class UserService {
         return user;
     }
 
-    public void update(int id, User newUser)  {
-         userDao.update(id, newUser);
+    public User update(int id, User newUser) throws UserNotFoundException, DuplicateValueException, InputException, EmailException {
+        delete(id);
+        return save(id, newUser.getFirstname(), newUser.getLastname(), newUser.getEmail());
     }
 
     public User findByEmail(String email) throws UserNotFoundException {

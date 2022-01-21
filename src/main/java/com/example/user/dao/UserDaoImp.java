@@ -1,9 +1,7 @@
 package com.example.user.dao;
 
 import com.example.user.model.User;
-import com.example.user.repository.UserRepository;
 import org.springframework.stereotype.Component;
-
 
 import java.util.List;
 
@@ -36,10 +34,6 @@ public class UserDaoImp implements UserDao {
         return repository.findByEmail(email).orElse(null);
     }
 
-    @Override
-    public void update(int id, User newUser) {
-        repository.update(id, newUser.getFirstname(), newUser.getLastname(), newUser.getEmail());
-    }
 
     @Override
     public int delete(int id) {
