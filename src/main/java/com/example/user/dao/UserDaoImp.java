@@ -2,10 +2,11 @@ package com.example.user.dao;
 
 import com.example.user.model.User;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class UserDaoImp implements UserDao {
 
     private final UserRepository repository;

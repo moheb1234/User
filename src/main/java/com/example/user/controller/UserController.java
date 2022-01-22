@@ -16,6 +16,7 @@ import static com.example.user.http_request_resource.UserUri.*;
 
 @RestController
 public class UserController {
+
     private final UserService service;
 
     public UserController(UserService service) {
